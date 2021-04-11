@@ -32,6 +32,9 @@ Parameters:
     Type: String
     Default: dasblog-walkthrough
     Description: Name used for different elements created.
+  TemplateURLBase:
+    Type: String
+    Description: Bucket holding the cloudformation template
 #   isSecondary:
 #     Default: "No"
 #     Type: String
@@ -57,23 +60,17 @@ Resources:
   dasblogwalkthroughVPCStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://dasblog-template.s3.amazonaws.com/dasblog-aurora-vpc.yml
+      # TemplateURL: https://dasblog-template.s3.amazonaws.com/dasblog-aurora-vpc.yml
+      TemplateURL: !Sub{TemplateURLBase}/dasblog-aurora-vpc.yml
       Parameters:
         TemplateName: !Ref TemplateName
-# Create the Cloud9 Environment
-  dasblogwalkthroughC9Stack:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: https://dasblog-template.s3.amazonaws.com/dasblog-aurora-cloud9.yml
-      Parameters:
-          PubSubnetId: !GetAtt 'dasblogwalkthroughVPCStack.Outputs.PublicSubnetA'
-          TemplateName: !Ref TemplateName
-          EnvType: !Ref EnvType
+
 # Create the RDS Cluster
   dasblogwalkthroughRDSStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://dasblog-template.s3.amazonaws.com/dasblog-aurora-cluster.yml
+      # TemplateURL: https://dasblog-template.s3.amazonaws.com/dasblog-aurora-cluster.yml
+      TemplateURL: !Sub{TemplateURLBase}/dasblog-aurora-cluster.yml
       Parameters:
           PubSubnetCidr: !GetAtt 'dasblogwalkthroughVPCStack.Outputs.PublicSubnetACidr'
           TemplateName: !Ref TemplateName
@@ -81,11 +78,24 @@ Resources:
         #   isSecondary: !Ref isSecondary
           MainVPC: !GetAtt dasblogwalkthroughVPCStack.Outputs.MainVPC
           PrivateSubnets: !GetAtt 'dasblogwalkthroughVPCStack.Outputs.PrivateSubnets'
+
+# Create the Cloud9 Environment
+  dasblogwalkthroughC9Stack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      # TemplateURL: https://dasblog-template.s3.amazonaws.com/dasblog-aurora-cloud9.yml
+      TemplateURL: !Sub{TemplateURLBase}/dasblog-aurora-cloud9.yml
+      Parameters:
+          PubSubnetId: !GetAtt 'dasblogwalkthroughVPCStack.Outputs.PublicSubnetA'
+          TemplateName: !Ref TemplateName
+          EnvType: !Ref EnvType
+
 # Create the CMK 
   dasblogwalkthroughCMK:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://dasblog-template.s3.amazonaws.com/dasblog-aurora-cmk-role.yml
+      # TemplateURL: https://dasblog-template.s3.amazonaws.com/dasblog-aurora-cmk-role.yml
+      TemplateURL: !Sub{TemplateURLBase}/dasblog-aurora-cmk-role.yml
       Parameters:
         TemplateName: !Ref TemplateName
 
