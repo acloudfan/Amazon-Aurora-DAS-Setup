@@ -61,7 +61,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Properties:
       # TemplateURL: https://dasblog-template.s3.amazonaws.com/dasblog-aurora-vpc.yml
-      TemplateURL: !Sub{TemplateURLBase}/dasblog-aurora-vpc.yml
+      TemplateURL: !Sub ${TemplateURLBase}/cloudformation/dasblog-aurora-vpc.yml
       Parameters:
         TemplateName: !Ref TemplateName
 
@@ -70,7 +70,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Properties:
       # TemplateURL: https://dasblog-template.s3.amazonaws.com/dasblog-aurora-cluster.yml
-      TemplateURL: !Sub{TemplateURLBase}/dasblog-aurora-cluster.yml
+      TemplateURL: !Sub ${TemplateURLBase}/cloudformation/dasblog-aurora-cluster.yml
       Parameters:
           PubSubnetCidr: !GetAtt 'dasblogwalkthroughVPCStack.Outputs.PublicSubnetACidr'
           TemplateName: !Ref TemplateName
@@ -84,18 +84,18 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Properties:
       # TemplateURL: https://dasblog-template.s3.amazonaws.com/dasblog-aurora-cloud9.yml
-      TemplateURL: !Sub{TemplateURLBase}/dasblog-aurora-cloud9.yml
+      TemplateURL: !Sub ${TemplateURLBase}/cloudformation/dasblog-aurora-cloud9.yml
       Parameters:
           PubSubnetId: !GetAtt 'dasblogwalkthroughVPCStack.Outputs.PublicSubnetA'
           TemplateName: !Ref TemplateName
-          EnvType: !Ref EnvType
+          # EnvType: !Ref EnvType
 
 # Create the CMK 
   dasblogwalkthroughCMK:
     Type: AWS::CloudFormation::Stack
     Properties:
       # TemplateURL: https://dasblog-template.s3.amazonaws.com/dasblog-aurora-cmk-role.yml
-      TemplateURL: !Sub{TemplateURLBase}/dasblog-aurora-cmk-role.yml
+      TemplateURL: !Sub ${TemplateURLBase}/cloudformation/dasblog-aurora-cmk-role.yml
       Parameters:
         TemplateName: !Ref TemplateName
 
@@ -103,12 +103,8 @@ Resources:
   DASDataBucket:
       Type: "AWS::S3::Bucket"
 
-  
 
- 
-
-
-## Outputs
+# Outputs
 Outputs:
   WalkthroughVPC:
     Description: Aurora PostgreSQL Lab VPCaupglabsRDSStack
@@ -161,4 +157,5 @@ Outputs:
     Value: !GetAtt dasblogwalkthroughCMK.Outputs.LambdaRoleArn
   DBClusterId:
     Description: Cluster resource ARN
-    Value: !If [WithInstance, !GetAtt dasblogwalkthroughRDSStack.Outputs.DBClusterId, '']
+    # Value: !If [WithInstance, !GetAtt dasblogwalkthroughRDSStack.Outputs.DBClusterId, '']
+    Value: !GetAtt dasblogwalkthroughRDSStack.Outputs.DBClusterId
