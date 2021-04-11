@@ -90,6 +90,15 @@ aws cloudformation create-stack \
     --parameters ParameterKey=DASS3BucketARN,ParameterValue=$DAS_S3_BUCKET_ARN \
                  ParameterKey=DASStreamARN,ParameterValue=$DAS_STREAM_ARN
 
+- Check the records in S3
+After a few minutes you would see objects created in the s3 bucket.
+The objects will be created in the subfolder "success-xxx" folder orgaznied with the default firehose naming scheme.
+
+### Step-5
+Now we will enable the decryption of messages in the Lambda function.
+
+
+
 --------
 aws s3 rm --recursive s3://$DAS_S3_BUCKET
 aws s
@@ -109,3 +118,8 @@ aws cloudformation update-stack \
     --capabilities "CAPABILITY_NAMED_IAM"  --profile blog --region us-east-1
 
 
+# Create the lambda package
+zip -r9 das-transformer-lambda-python37.zip .
+
+# Create the Lambda Layer
+PS: MUST create on a Linux/Ubuntu VM

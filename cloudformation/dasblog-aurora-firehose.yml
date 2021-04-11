@@ -18,6 +18,9 @@ Parameters:
     Type: String
     Description: Name used for different elements created.
     Default: dasblog-firehose
+  DASS3BucketTemplate:
+    Type: String
+    Description: This is the public S3 bucket with all artefacts
   DASS3BucketARN:
     Type: String
     Description: Name of the S3 Bucket to which firehose writes
@@ -126,20 +129,20 @@ Resources:
 # Create the Lambda Layer
   awssdkEncryptionLambdaLayer:
     Type: AWS::Lambda::LayerVersion
-    Condition: WithLambda
+    # Condition: WithLambda
     Properties: 
       CompatibleRuntimes: 
         - python3.7
       Description: 'AWS SDK Encryption Library'
       Content: 
-        S3Bucket: dasblog-template
-        S3Key: aws-sdk-encryption-lambda-layer-python37.zip
+        S3Bucket: !Ref DASS3BucketTemplate
+        S3Key: lambda/layer/aws-sdk-encryption-lambda-layer-python37.zip
       LayerName: aws-sdk-encryption-python37
       
 # Create the Lambda function
   dasStreamTransformerLambda:
     Type: AWS::Lambda::Function
-    Condition: WithLambda
+    # Condition: WithLambda
     Properties:
       FunctionName: das-stream-firehose-transformer
       Handler: lambda_function.lambda_handler
@@ -154,8 +157,8 @@ Resources:
           FILTER_HEARTBEAT_EVENTS: false
           RESOURCE_ID: !Ref ClusterResourceID
       Code:
-        S3Bucket: dasblog-template
-        S3Key: das-transformer-lambda-python37.zip
+        S3Bucket: !Ref DASS3BucketTemplate
+        S3Key: lambda/code/das-transformer-lambda-python37.zip
         # ZipFile: das-transformer-lambda-python37.zip
         
   # Firehose delivery stream Without TRANSFORM
