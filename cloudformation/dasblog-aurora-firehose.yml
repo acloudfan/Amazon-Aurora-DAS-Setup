@@ -178,7 +178,7 @@ Resources:
       S3DestinationConfiguration:
         BucketARN: !Ref DASS3BucketARN
         # Prefix: success-
-        ErrorOutputPrefix: failure-
+        # ErrorOutputPrefix: failure-
         CloudWatchLoggingOptions: 
           Enabled: true
           LogGroupName: dasblog-walkthrough
@@ -208,7 +208,7 @@ Resources:
       ExtendedS3DestinationConfiguration:
         BucketARN: !Ref DASS3BucketARN
         # Prefix: success-
-        ErrorOutputPrefix: failure-
+        # ErrorOutputPrefix: failure-
         CloudWatchLoggingOptions: 
           Enabled: true
           LogGroupName: dasblog-walkthrough
