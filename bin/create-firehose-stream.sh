@@ -1,11 +1,25 @@
 #!/bin/sh
+
 # 1. Get the ARN of the stream for the DB Cluster
-STREAM_NAME=`aws rds describe-db-clusters  --db-cluster-identifier  $DB_CLUSTER_ID \
+export STREAM_NAME=`aws rds describe-db-clusters  --db-cluster-identifier  $DB_CLUSTER_ID \
         --query 'DBClusters[0].ActivityStreamKinesisStreamName' --output text`
 
 # 2. Get the ARNN of the stream
-DAS_STREAM_ARN=`aws kinesis describe-stream --stream-name $STREAM_NAME --region $AWSREGION \
+export DAS_STREAM_ARN=`aws kinesis describe-stream --stream-name $STREAM_NAME --region $AWSREGION \
         --query 'StreamDescription.StreamARN'  --output text`
+
+# 3. Create the stream
+export  CF_FIREHOSE_TEMPLATE_NAME="$CF_TEMPLATE_NAME-firehose"
+aws cloudformation create-stack \
+    --stack-name dasblog-firehose-stream \
+    --template-url $S3BUCKET_TEMPLATE_URL/cloudformation/dasblog-aurora-main.yml \
+    --parameters ParameterKey=TemplateName,ParameterValue=$CF_FIREHOSE_TEMPLATE_NAME \
+                 ParameterKey=DASS3BucketARN,ParameterValue=$DAS_S3_BUCKET_ARN \
+                 ParameterKey=DASStreamARN,ParameterValue=$DAS_STREAM_ARN  \
+                 ParameterKey=ClusterResourceID,ParameterValue=$CLUSTER_RESOURCE_ID  \
+                 ParameterKey=LambdaRoleArn,ParameterValue=$DAS_LAMBDA_ROLE_ARN  \
+                 ParameterKey=doStreamTransform,ParameterValue=No  \
+
 
 # # 3. Create the stream
 #  aws firehose create-delivery-stream \
@@ -16,13 +30,13 @@ DAS_STREAM_ARN=`aws kinesis describe-stream --stream-name $STREAM_NAME --region 
 #     #  --delivery-stream-encryption-configuration-input  KeyARN=$DAS_CMK_KEY_ARN,KeyType=CUSTOMER_MANAGED_CMK   
 
 
-echo $DAS_STREAM_ARN
-aws cloudformation update-stack \
-    --stack-name dasblog-firehose-stream \
-    --template-body file://dasblog-aurora-firehose.yml \
-    --parameters ParameterKey=DASS3BucketARN,ParameterValue=$DAS_S3_BUCKET_ARN \
-                 ParameterKey=DASStreamARN,ParameterValue=$DAS_STREAM_ARN  \
-                 ParameterKey=ClusterResourceID,ParameterValue=$CLUSTER_RESOURCE_ID  \
-                 ParameterKey=LambdaRoleArn,ParameterValue=$DAS_LAMBDA_ROLE_ARN \
-    --capabilities "CAPABILITY_NAMED_IAM"
+# echo $DAS_STREAM_ARN
+# aws cloudformation update-stack \
+#     --stack-name dasblog-firehose-stream \
+#     --template-body file://dasblog-aurora-firehose.yml \
+#     --parameters ParameterKey=DASS3BucketARN,ParameterValue=$DAS_S3_BUCKET_ARN \
+#                  ParameterKey=DASStreamARN,ParameterValue=$DAS_STREAM_ARN  \
+#                  ParameterKey=ClusterResourceID,ParameterValue=$CLUSTER_RESOURCE_ID  \
+#                  ParameterKey=LambdaRoleArn,ParameterValue=$DAS_LAMBDA_ROLE_ARN \
+#     --capabilities "CAPABILITY_NAMED_IAM"
 

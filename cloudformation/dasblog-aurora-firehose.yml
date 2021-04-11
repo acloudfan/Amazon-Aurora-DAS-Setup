@@ -32,7 +32,7 @@ Parameters:
     Description: ARN of the Role for Lambda
   doStreamTransform:
     Description: Carries out the transformation via Lambda if set to yes
-    Default: "Yes"
+    Default: "No"
     Type: String
     AllowedValues:
       - "Yes"
