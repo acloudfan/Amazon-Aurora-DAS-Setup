@@ -35,6 +35,7 @@ aws cloudformation create-stack \
                  ParameterKey=DASStreamARN,ParameterValue=$DAS_STREAM_ARN  \
                  ParameterKey=ClusterResourceID,ParameterValue=$CLUSTER_RESOURCE_ID  \
                  ParameterKey=LambdaRoleArn,ParameterValue=$DAS_LAMBDA_ROLE_ARN  \
+                 ParameterKey=LambdaFunctionName,ParameterValue=$LAMBDA_FUNCTION_NAME  \
                  ParameterKey=doStreamTransform,ParameterValue=$DO_STREAM_TRANSFORM \
     --capabilities "CAPABILITY_NAMED_IAM"
 

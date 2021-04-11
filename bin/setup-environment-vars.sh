@@ -87,4 +87,27 @@ export CLUSTER_ARN=`aws rds describe-db-clusters  --db-cluster-identifier  $DB_C
         --query 'DBClusters[0].DBClusterArn' --output text`
 echo "export CLUSTER_ARN=\"$CLUSTER_ARN\"" >> /home/ec2-user/.bashrc
 
+# Lambda function name
+export LAMBDA_FUNCTION_NAME=das-stream-firehose-transformer
+echo "export LAMBDA_FUNCTION_NAME=\"$LAMBDA_FUNCTION_NAME\"" >> /home/ec2-user/.bashrc
+
+# setup DB parameters for psql
+CREDS=`aws secretsmanager get-secret-value --secret-id $DB_SECRET_ARN  --region $AWSREGION | jq -r '.SecretString'`
+export DBUSER="`echo $CREDS | jq -r '.username'`"
+export DBPASS="`echo $CREDS | jq -r '.password'`"
+
+export PGHOST=$DBENDP
+export PGUSER=$DBUSER
+export PGPASSWORD="$DBPASS"
+export PGDATABASE=$DB_NAME
+
+echo "export DBPASS=\"$DBPASS\"" >> /home/ec2-user/.bashrc
+echo "export DBUSER=$DBUSER" >> /home/ec2-user/.bashrc
+echo "export DBENDP=$DBENDP" >> /home/ec2-user/.bashrc
+echo "export PGUSER=$DBUSER" >> /home/ec2-user/.bashrc
+echo "export PGPASSWORD=\"$DBPASS\"" >> /home/ec2-user/.bashrc
+echo "export PGHOST=$RDS_CLUSTER_ENDPOINT" >> /home/ec2-user/.bashrc
+echo "export PGPORT=$DB_PORT" >> /home/ec2-user/.bashrc
+echo "export PGDATABASE=$DB_NAME" >> /home/ec2-user/.bashrc
+
 echo "Done."

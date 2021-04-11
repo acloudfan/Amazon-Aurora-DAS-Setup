@@ -33,6 +33,9 @@ Parameters:
   LambdaRoleArn:
     Type: String
     Description: ARN of the Role for Lambda
+  LambdaFunctionName:
+    Type: String
+    Description: Name of the Lambda function used for transformation
   doStreamTransform:
     Description: Carries out the transformation via Lambda if set to yes
     Default: "No"
@@ -144,7 +147,7 @@ Resources:
     Type: AWS::Lambda::Function
     # Condition: WithLambda
     Properties:
-      FunctionName: das-stream-firehose-transformer
+      FunctionName: !Ref LambdaFunctionName
       Handler: lambda_function.lambda_handler
       # Role: !GetAtt 'roleLambdaFormatter.Arn'  
       Role: !Ref LambdaRoleArn
@@ -174,7 +177,7 @@ Resources:
         RoleARN: !GetAtt roleFirehoseS3Delivery.Arn
       S3DestinationConfiguration:
         BucketARN: !Ref DASS3BucketARN
-        Prefix: success-
+        # Prefix: success-
         ErrorOutputPrefix: failure-
         CloudWatchLoggingOptions: 
           Enabled: true

@@ -10,40 +10,22 @@ ADD_ON_JSON='{ "Sid" : "Enable lambda role to access key","Effect" : "Allow","Pr
 
 POLICY=`aws kms get-key-policy --key-id $DAS_CMK_KEY_ARN --policy-name default --output json`
 
-# echo $POLICY
 POLICY=$( jq -r '.Policy' <<< "$POLICY")
-# echo $POLICY
-
-# exit 0
 
 PART1=$(echo $POLICY | cut -f1 -d])
 PART2=$(echo $POLICY | cut -f2 -d])
 NEW_POLICY="$PART1 , $ADD_ON_JSON ]  $PART2"
 
-echo $NEW_POLICY > temp.json
-# POLICY=$( jq -r '.Policy' <<< "$NEW_POLICY")
-
-
-# find='\\"'
-# rep='"'
-# NEW_POLICY=${NEW_POLICY//$find/$rep}
-# NEW_POLICY=$(echo -e "$NEW_POLICY")
-# POLICY=$( jq -r '.Policy' <<< "$NEW_POLICY")
-# echo $POLICY
-
-# echo $NEW_POLICY
-
-# X=$(echo $NEW_POLICY | sed 's/\\n/\n/g')
-# echo $X
-
+mkdir temp
+echo $NEW_POLICY > temp/key-policy.json
 
 aws kms put-key-policy \
     --key-id $DAS_CMK_KEY_ARN \
     --policy-name default \
-    --policy  file://temp.json
+    --policy  file://temp/key-policy.json
 
 aws kms get-key-policy \
     --policy-name default \
     --key-id $DAS_CMK_KEY_ARN 
 
-#  aws kms put-key-policy  --generate-cli-skeleton --cli-input-json '$POLICY'
+rm -r ./temp
