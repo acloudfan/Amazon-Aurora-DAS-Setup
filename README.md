@@ -144,7 +144,7 @@ Query the data with Athena to generate the reports.
 #### Cleanup
 1. Delete the Firehose
 aws cloudformation delete-stack --stack-name $DAS_WORKSHOP_FIREHOSE_STACK_NAME
-aws cloudformation 
+aws cloudformation delete-stack --stack-name $DAS_WALKTHROUGH_CF_STACK_NAME
 
 --------
 aws s3 rm --recursive s3://$DAS_S3_BUCKET
