@@ -9,7 +9,7 @@ Create the CloudFormation Stack
 This would create the resources that we will
 
 export S3BUCKET_TEMPLATE=dasblog-templates2
-export S3BUCKET_TEMPLATE_URL=https://dasblog-templates2.s3.amazonaws.com
+export S3BUCKET_TEMPLATE_URL=https://$S3BUCKET_TEMPLATE.s3.amazonaws.com
 export CF_TEMPLATE_NAME=das-walkthrough
 export DAS_WALKTHROUGH_CF_STACK_NAME=das-walkthrough
 
@@ -26,8 +26,11 @@ aws cloudformation create-stack \
 ### Step-2
 Once the stack has Launched open the Cloud9 IDE
 
-aws cloudformation --region us-east-1 describe-stacks --stack-name $DAS_WALKTHROUGH_CF_STACK_NAME\
-                    --query "Stacks[0].Outputs[?OutputKey=='Cloud9URL'].OutputValue" --output text
+export DAS_WALKTHROUGH_CF_STACK_NAME=das-walkthrough
+aws cloudformation --region us-east-1 describe-stacks \
+                   --stack-name $DAS_WALKTHROUGH_CF_STACK_NAME\
+                   --query "Stacks[0].Outputs[?OutputKey=='Cloud9URL'].OutputValue" \
+                   --output text
 
 Copy and paste the URL in a browser tab. We will carry out the rest of the steps in the Cloud9 IDE
 
@@ -38,7 +41,7 @@ Setup the environment and download scripts
 Copy thes in a terminal window.
 
 export S3BUCKET_TEMPLATE=dasblog-templates2
-export S3BUCKET_TEMPLATE_URL=https://dasblog-templates2.s3.amazonaws.com
+export S3BUCKET_TEMPLATE_URL=https://$S3BUCKET_TEMPLATE.s3.amazonaws.com
 export  CF_TEMPLATE_NAME=das-walkthrough
 export  DAS_WALKTHROUGH_CF_STACK_NAME=das-walkthrough
 
@@ -51,7 +54,7 @@ This script sets up the environment vars in the bashrc file
 These are for conveneince
 We will be using these env vars in this exercise
 
-chmod 755 ./bin/setup-environment-vars.sh
+chmod u+x ./bin/*
 ./bin/setup-environment-vars.sh
 
 ### Step-3
@@ -83,7 +86,12 @@ aws rds describe-db-clusters --db-cluster-identifier $DB_CLUSTER_ID   | grep Act
 ### Step-4
 Create a Firehose deilvery stream to write the records to S3 bucket
 
-./bin/create...
+./bin/create-firehose-stream.sh
+
+aws cloudformation describe-stacks \
+    --stack-name $DAS_WORKSHOP_FIREHOSE_STACK_NAME \
+    | grep StackStatus
+
 <!-- export  CF_FIREHOSE_TEMPLATE_NAME="$CF_TEMPLATE_NAME-firehose"
 aws cloudformation create-stack \
     --stack-name dasblog-firehose-stream \

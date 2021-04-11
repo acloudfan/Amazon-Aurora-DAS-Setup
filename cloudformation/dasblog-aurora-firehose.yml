@@ -207,7 +207,7 @@ Resources:
       #   RoleARN: !GetAtt roleFirehoseS3Delivery.Arn
       ExtendedS3DestinationConfiguration:
         BucketARN: !Ref DASS3BucketARN
-        Prefix: success-
+        # Prefix: success-
         ErrorOutputPrefix: failure-
         CloudWatchLoggingOptions: 
           Enabled: true
