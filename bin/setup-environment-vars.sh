@@ -87,6 +87,10 @@ export CLUSTER_ARN=`aws rds describe-db-clusters  --db-cluster-identifier  $DB_C
         --query 'DBClusters[0].DBClusterArn' --output text`
 echo "export CLUSTER_ARN=\"$CLUSTER_ARN\"" >> /home/ec2-user/.bashrc
 
+# Firehose stack name
+export DAS_WORKSHOP_FIREHOSE_STACK_NAME=dasblog-firehose-stream
+echo "export DAS_WORKSHOP_FIREHOSE_STACK_NAME=\"$DAS_WORKSHOP_FIREHOSE_STACK_NAME\"" >> /home/ec2-user/.bashrc
+
 # Lambda function name
 export LAMBDA_FUNCTION_NAME=das-stream-firehose-transformer
 echo "export LAMBDA_FUNCTION_NAME=\"$LAMBDA_FUNCTION_NAME\"" >> /home/ec2-user/.bashrc

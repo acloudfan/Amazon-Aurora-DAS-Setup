@@ -140,6 +140,11 @@ SELECT * FROM test_table;
 Query the data with Athena to generate the reports.
 
 
+#### Cleanup
+1. Delete the Firehose
+
+
+
 --------
 aws s3 rm --recursive s3://$DAS_S3_BUCKET
 aws s
