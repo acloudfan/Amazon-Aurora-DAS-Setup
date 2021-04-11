@@ -16,7 +16,7 @@ export DAS_STREAM_ARN=`aws kinesis describe-stream --stream-name $STREAM_NAME --
 # 3. Create the stream
 export  CF_FIREHOSE_TEMPLATE_NAME="$CF_TEMPLATE_NAME-firehose"
 aws cloudformation update-stack \
-    --stack-name dasblog-firehose-stream \
+    --stack-name $DAS_WORKSHOP_FIREHOSE_STACK_NAME \
     --template-url $S3BUCKET_TEMPLATE_URL/cloudformation/dasblog-aurora-firehose.yml \
     --parameters ParameterKey=TemplateName,ParameterValue=$CF_FIREHOSE_TEMPLATE_NAME \
                  ParameterKey=DASS3BucketTemplate,ParameterValue=$S3BUCKET_TEMPLATE \

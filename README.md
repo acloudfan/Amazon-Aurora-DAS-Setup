@@ -83,12 +83,13 @@ aws rds describe-db-clusters --db-cluster-identifier $DB_CLUSTER_ID   | grep Act
 ### Step-4
 Create a Firehose deilvery stream to write the records to S3 bucket
 
-export  CF_FIREHOSE_TEMPLATE_NAME="$CF_TEMPLATE_NAME-firehose"
+./bin/create...
+<!-- export  CF_FIREHOSE_TEMPLATE_NAME="$CF_TEMPLATE_NAME-firehose"
 aws cloudformation create-stack \
     --stack-name dasblog-firehose-stream \
     --template-url $S3BUCKET_TEMPLATE_URL/cloudformation/dasblog-aurora-main.yml \
     --parameters ParameterKey=DASS3BucketARN,ParameterValue=$DAS_S3_BUCKET_ARN \
-                 ParameterKey=DASStreamARN,ParameterValue=$DAS_STREAM_ARN
+                 ParameterKey=DASStreamARN,ParameterValue=$DAS_STREAM_ARN -->
 
 - Check the records in S3
 After a few minutes you would see objects created in the s3 bucket.
@@ -142,8 +143,8 @@ Query the data with Athena to generate the reports.
 
 #### Cleanup
 1. Delete the Firehose
-
-
+aws cloudformation delete-stack --stack-name $DAS_WORKSHOP_FIREHOSE_STACK_NAME
+aws cloudformation 
 
 --------
 aws s3 rm --recursive s3://$DAS_S3_BUCKET
