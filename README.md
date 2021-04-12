@@ -178,3 +178,30 @@ zip -r9 das-transformer-lambda-python37.zip .
 
 # Create the Lambda Layer
 PS: MUST create on a Linux/Ubuntu VM
+
+
+---- test
+
+aws cloudformation create-stack \
+    --stack-name $DAS_WALKTHROUGH_CF_STACK_NAME-aurora-glue \
+    --template-url $S3BUCKET_TEMPLATE_URL/cloudformation/dasblog-aurora-glue.yml \
+    --parameters ParameterKey=TemplateName,ParameterValue=$CF_TEMPLATE_NAME  \
+                 ParameterKey=S3BucketARN,ParameterValue=$DAS_S3_BUCKET_ARN  \
+                 ParameterKey=S3BucketPath,ParameterValue=$DAS_S3_BUCKET/  \
+    --capabilities "CAPABILITY_NAMED_IAM"  
+
+aws cloudformation update-stack \
+    --stack-name $DAS_WALKTHROUGH_CF_STACK_NAME-aurora-glue \
+    --template-url $S3BUCKET_TEMPLATE_URL/cloudformation/dasblog-aurora-glue.yml \
+    --parameters ParameterKey=TemplateName,ParameterValue=$CF_TEMPLATE_NAME  \
+                 ParameterKey=S3BucketARN,ParameterValue=$DAS_S3_BUCKET_ARN  \
+                 ParameterKey=S3BucketPath,ParameterValue=$DAS_S3_BUCKET/  \
+    --capabilities "CAPABILITY_NAMED_IAM"  
+
+execute the crawler
+Name of crawler = $CF_TEMPLATE_NAME-crawler
+https://docs.aws.amazon.com/cli/latest/reference/glue/start-crawler.html
+
+aws glue start-crawler --name $CF_TEMPLATE_NAME-crawler
+aws glue get-crawler --name $CF_TEMPLATE_NAME-crawler | grep State
+
