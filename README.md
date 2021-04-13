@@ -148,11 +148,55 @@ SELECT * FROM test_table;
 ### Step-7
 Query the data with Athena to generate the reports.
 
+3. setup athena results bucket
+
+1. Create the stack
+
+2. Start the crawler
+
+3. Create the view
+-- View Example
+CREATE
+        OR REPLACE VIEW dasblog AS
+SELECT partition_0 AS year,
+         partition_1 AS month,
+         partition_2 AS day,
+         partition_3 AS hour,
+         databaseactivityeventlist[1].command AS command,
+         databaseactivityeventlist[1].statementid AS statementid,
+         databaseactivityeventlist[1].substatementid AS substatementid,
+         databaseactivityeventlist[1].objecttype AS objecttype,
+         databaseactivityeventlist[1].objectname AS objectname,
+         databaseactivityeventlist[1].logtime AS logtime,
+         databaseactivityeventlist[1].databasename AS databasename,
+         databaseactivityeventlist[1].dbusername AS dbusername,
+         databaseactivityeventlist[1].remotehost AS remotehost,
+         databaseactivityeventlist[1].remoteport AS remoteport,
+         databaseactivityeventlist[1].sessionid AS sessionid,
+         databaseactivityeventlist[1].rowcount AS rowcount,
+         databaseactivityeventlist[1].commandtext AS commandtext,
+         databaseactivityeventlist[1].paramlist AS paramlist,
+         databaseactivityeventlist[1].pid AS pid,
+         databaseactivityeventlist[1].clientapplication AS clientapplication,
+         databaseactivityeventlist[1].exitcode AS exitcode,
+         databaseactivityeventlist[1].class AS class,
+         databaseactivityeventlist[1].serverversion AS serverversion,
+         databaseactivityeventlist[1].servertype AS servertype,
+         databaseactivityeventlist[1].servicename AS servicename,
+         databaseactivityeventlist[1].serverhost AS serverhost,
+         databaseactivityeventlist[1].netprotocol AS netprotocol,
+         databaseactivityeventlist[1].dbprotocol AS dbprotocol,
+         databaseactivityeventlist[1].type AS type,
+         databaseactivityeventlist[1].starttime AS starttime,
+         databaseactivityeventlist[1].errormessage AS errormessage,
+         databaseactivityeventlist[1] AS raw
+FROM das_walkthrough_dasdatabucket_10e42wo0x3ba4 ; 
 
 #### Cleanup
 1. Delete the Firehose
 aws cloudformation delete-stack --stack-name $DAS_WORKSHOP_FIREHOSE_STACK_NAME
 aws cloudformation delete-stack --stack-name $DAS_WALKTHROUGH_CF_STACK_NAME
+Delete the Glue Database
 
 --------
 aws s3 rm --recursive s3://$DAS_S3_BUCKET
@@ -201,6 +245,7 @@ aws cloudformation update-stack \
 execute the crawler
 Name of crawler = $CF_TEMPLATE_NAME-crawler
 https://docs.aws.amazon.com/cli/latest/reference/glue/start-crawler.html
+https://stackoverflow.com/questions/55386143/aws-glue-tutorial-fails-when-trying-to-run-crawler
 
 aws glue start-crawler --name $CF_TEMPLATE_NAME-crawler
 aws glue get-crawler --name $CF_TEMPLATE_NAME-crawler | grep State

@@ -48,6 +48,14 @@ Resources:
           Statement:
             - Effect: Allow
               Action:
+                - glue:*
+                - iam:ListRolePolicies
+                - iam:GetRole
+                - iam:GetRolePolicy
+              Resource: 
+                - '*'
+            - Effect: Allow
+              Action:
                 - s3:ListBucket
                 - s3:GetObject
               Resource:
@@ -79,7 +87,30 @@ Resources:
       Description: Used for crawling the Aurora DAS data
       Name: !Sub ${TemplateName}-crawler
       DatabaseName: !Ref daseventDatabase
-      Role: !GetAtt dasblogCrawlerRole.Arn
+      # Role: !GetAtt dasblogCrawlerRole.Arn
+      Role: !Ref dasblogCrawlerRole
       Targets:
         S3Targets:
           - Path: { Ref: S3BucketPath }
+
+# Athena Workgroup configuration
+  dasblogAthenaWorkgroup:
+    Type: AWS::Athena::WorkGroup
+    Properties: 
+      Name: dasblog-workgroup
+      RecursiveDeleteOption: "true"
+      State: ENABLED
+      WorkGroupConfiguration:
+        ResultConfiguration: 
+          OutputLocation: !Sub s3://${DASAthenaResultsQueryBucket}
+
+# S3 bucket for Athena results
+  DASAthenaResultsQueryBucket:
+      Type: "AWS::S3::Bucket"
+      DeletionPolicy: Delete
+
+# Outputs
+Outputs:
+  AthenaResultQueryBucket:
+    Description: Bucket for managing Athena queries
+    Value: !Ref 'DASAthenaResultsQueryBucket'
