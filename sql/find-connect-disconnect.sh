@@ -5,6 +5,10 @@ FROM $DASBLOG_ATHENA_VIEW_NAME
 WHERE (command='CONNECT'
         OR command='DISCONNECT')"
 
+
+#----- Do not change under this line ----#
+
+# Start the execution of the Query
 QUERY_ID=$(aws athena start-query-execution  \
   --work-group $DASBLOG_ATHENA_WORKGROUP \
   --query-execution-context "Database=$DASBLOG_GLUE_DATABASE" \
@@ -12,6 +16,8 @@ QUERY_ID=$(aws athena start-query-execution  \
   | jq -r .QueryExecutionId)
   
 
+# Call to this will make the execution wait for the query to complete
+# Once the query has completed, results will be dumped on the console
 ./bin/run-athena-query.sh  $QUERY_ID
   
 

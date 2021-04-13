@@ -162,8 +162,9 @@ aws glue start-crawler --name $CF_TEMPLATE_NAME-crawler
 aws glue get-crawler --name $CF_TEMPLATE_NAME-crawler | grep State
 
 3. Create the view
+
 Sets up the table name in an environment variable = DASBLOG_GLUE_TABLE 
-source ./bin/setup-dasblog-athena-view.sh 
+./bin/setup-dasblog-athena-view.sh 
 
 aws athena get-query-execution \
    --query-execution-id <<Query ID>>
@@ -175,7 +176,14 @@ Example:
    | jq .QueryExecution.Status
 
 4. Execute the SQLs
-select * from dasblog where command='INSERT' and dbusername='masteruser'
+You may execute Athena queries in the AWS Athena Console or by way of the AWS CLI. For convenience we have setup the queries as utility scripts. You may change these scripts to execute your own Athena queries. To test out your setup, execute the following sample query scripts:
+
+chmod u+x ./sql/*
+./sql/find-connect-disconnect.sh
+
+./sql/find-all-insert.sh
+
+Follow the instructions provided in the sample files under ./sql folder to create your own queries and try out againts the DAS events data.
 
 
 
