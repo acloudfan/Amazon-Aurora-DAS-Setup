@@ -114,4 +114,14 @@ echo "export PGHOST=$RDS_CLUSTER_ENDPOINT" >> /home/ec2-user/.bashrc
 echo "export PGPORT=$DB_PORT" >> /home/ec2-user/.bashrc
 echo "export PGDATABASE=$DB_NAME" >> /home/ec2-user/.bashrc
 
+
+# Glue & Athena
+export DASBLOG_GLUE_DATABASE=das-walkthrough-db
+export DASBLOG_ATHENA_WORKGROUP=dasblog-workgroup
+export DASBLOG_ATHENA_VIEW_NAME=dasblog
+
+echo "export DASBLOG_GLUE_DATABASE=\"$DASBLOG_GLUE_DATABASE\"" >> /home/ec2-user/.bashrc
+echo "export DASBLOG_ATHENA_WORKGROUP=\"$DASBLOG_ATHENA_WORKGROUP\"" >> /home/ec2-user/.bashrc
+echo "export DASBLOG_ATHENA_VIEW_NAME=\"$DASBLOG_ATHENA_VIEW_NAME\"" >> /home/ec2-user/.bashrc
+
 echo "Done."

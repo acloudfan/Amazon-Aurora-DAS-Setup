@@ -1,15 +1,17 @@
 #!/bin/bash
 
-aws athena start-query-execution \
-    --query-string "create view my_view as select * from my_table" 
-    --result-configuration "OutputLocation=s3://my-bucket/tmp" 
-    --query-execution-context "Database=my_database"
 
-
-
--- View Example
+DASBLOG_GLUE_TABLE=$(aws athena list-table-metadata \
+    --catalog-name AwsDataCatalog \
+    --database-name $DASBLOG_GLUE_DATABASE \
+    --output json \
+    | jq .TableMetadataList[0].Name)
+    
+echo "Glue TableName = $DASBLOG_GLUE_TABLE"
+    
+ATHENA_VIEW_QUERY="
 CREATE
-        OR REPLACE VIEW dasblog AS
+        OR REPLACE VIEW $DASBLOG_ATHENA_VIEW_NAME AS 
 SELECT partition_0 AS year,
          partition_1 AS month,
          partition_2 AS day,
@@ -41,5 +43,13 @@ SELECT partition_0 AS year,
          databaseactivityeventlist[1].type AS type,
          databaseactivityeventlist[1].starttime AS starttime,
          databaseactivityeventlist[1].errormessage AS errormessage,
-         databaseactivityeventlist[1] AS raw
-FROM das_walkthrough_dasdatabucket_10e42wo0x3ba4 ; 
+         databaseactivityeventlist[1] AS raw 
+FROM $DASBLOG_GLUE_TABLE ; "
+
+
+aws athena start-query-execution  \
+  --work-group $DASBLOG_ATHENA_WORKGROUP \
+  --query-execution-context "Database=$DASBLOG_GLUE_DATABASE" \
+  --query-string "$ATHENA_VIEW_QUERY"  
+
+# aws athena get-query-execution --query-execution-id 19caff17-05c9-49fd-8f3b-80e7bfeb9a41
