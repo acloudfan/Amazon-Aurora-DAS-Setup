@@ -1,12 +1,20 @@
 # Setup Database Activity Streams on RDS Aurora
 
-### Step-1
-
-
+1. Create an S3 bucket in the region you will carry out the steps
+2. Copy the content of this repository to the S3 bucket
+3. In Step-1 change the name of the bucket to your bucket
+   export S3BUCKET_TEMPLATE=<<YOUR BUCKET>
+4. Follow the instructions in the rest of the steps to see the DAS in action
 
 ### Step-1
 Create the CloudFormation Stack 
 This would create the resources that we will
+
+- You may do it in console or with AWS CLI
+- If you do it in console provide the parameter values as shown below
+   o	TemplateName = dasblog-walkthrough
+   o	TemplateURLBase = https://<<Your S3 Bucket>
+
 
 export S3BUCKET_TEMPLATE=dasblog-templates2
 export S3BUCKET_TEMPLATE_URL=https://$S3BUCKET_TEMPLATE.s3.amazonaws.com
@@ -26,6 +34,7 @@ aws cloudformation create-stack \
 ### Step-2
 Once the stack has Launched open the Cloud9 IDE
 
+You may use the console or 
 export DAS_WALKTHROUGH_CF_STACK_NAME=dasblog-walkthrough
 aws cloudformation --region us-east-1 describe-stacks \
                    --stack-name $DAS_WALKTHROUGH_CF_STACK_NAME\
@@ -204,7 +213,11 @@ WHERE (command='CONNECT'
         OR command='DISCONNECT')
 
 
+----
 
+aws rds stop-activity-stream \
+  --resource-arn  $CLUSTER_ARN \
+  --apply-immediately
 
 
 --------

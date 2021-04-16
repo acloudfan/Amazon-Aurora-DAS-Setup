@@ -54,4 +54,10 @@ QUERY_ID=$(aws athena start-query-execution  \
   | jq -r .QueryExecutionId)
 
 
-./bin/wait-for-athena-query-results.sh  $QUERY_ID
+# Wait for view to be created
+if [ -n "$QUERY_ID" ];
+then
+    ./bin/wait-for-athena-query-results.sh  $QUERY_ID
+else
+    echo "Error in Query?"
+fi
