@@ -47,9 +47,11 @@ SELECT partition_0 AS year,
 FROM $DASBLOG_GLUE_TABLE ; "
 
 
-aws athena start-query-execution  \
+QUERY_ID=$(aws athena start-query-execution  \
   --work-group $DASBLOG_ATHENA_WORKGROUP \
   --query-execution-context "Database=$DASBLOG_GLUE_DATABASE" \
-  --query-string "$ATHENA_VIEW_QUERY"  
+  --query-string "$ATHENA_VIEW_QUERY"  \
+  | jq -r .QueryExecutionId)
 
-# aws athena get-query-execution --query-execution-id 19caff17-05c9-49fd-8f3b-80e7bfeb9a41
+
+./bin/wait-for-athena-query-results.sh  $QUERY_ID

@@ -15,10 +15,16 @@ QUERY_ID=$(aws athena start-query-execution  \
   --query-string "$QUERY"  \
   | jq -r .QueryExecutionId)
   
+echo "QUERY_ID=$QUERY_ID"
 
 # Call to this will make the execution wait for the query to complete
 # Once the query has completed, results will be dumped on the console
-./bin/run-athena-query.sh  $QUERY_ID
+if [ -n "$QUERY_ID" ];
+then
+    ./bin/wait-for-athena-query-results.sh  $QUERY_ID
+else
+    echo "Error in Query?"
+fi
   
 
 

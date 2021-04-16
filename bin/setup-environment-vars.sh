@@ -116,7 +116,7 @@ echo "export PGDATABASE=$DB_NAME" >> /home/ec2-user/.bashrc
 
 
 # Glue & Athena
-export DASBLOG_GLUE_DATABASE=das-walkthrough-db
+export DASBLOG_GLUE_DATABASE=dasblog-walkthrough-db
 export DASBLOG_ATHENA_WORKGROUP=dasblog-workgroup
 export DASBLOG_ATHENA_VIEW_NAME=dasblog
 

@@ -10,8 +10,8 @@ This would create the resources that we will
 
 export S3BUCKET_TEMPLATE=dasblog-templates2
 export S3BUCKET_TEMPLATE_URL=https://$S3BUCKET_TEMPLATE.s3.amazonaws.com
-export CF_TEMPLATE_NAME=das-walkthrough
-export DAS_WALKTHROUGH_CF_STACK_NAME=das-walkthrough
+export CF_TEMPLATE_NAME=dasblog-walkthrough
+export DAS_WALKTHROUGH_CF_STACK_NAME=dasblog-walkthrough
 
 
 aws cloudformation create-stack \
@@ -26,7 +26,7 @@ aws cloudformation create-stack \
 ### Step-2
 Once the stack has Launched open the Cloud9 IDE
 
-export DAS_WALKTHROUGH_CF_STACK_NAME=das-walkthrough
+export DAS_WALKTHROUGH_CF_STACK_NAME=dasblog-walkthrough
 aws cloudformation --region us-east-1 describe-stacks \
                    --stack-name $DAS_WALKTHROUGH_CF_STACK_NAME\
                    --query "Stacks[0].Outputs[?OutputKey=='Cloud9URL'].OutputValue" \
@@ -42,7 +42,7 @@ Copy thes in a terminal window.
 
 export S3BUCKET_TEMPLATE=dasblog-templates2
 export S3BUCKET_TEMPLATE_URL=https://$S3BUCKET_TEMPLATE.s3.amazonaws.com
-export  CF_TEMPLATE_NAME=das-walkthrough
+export  CF_TEMPLATE_NAME=dasblog-walkthrough
 export  DAS_WALKTHROUGH_CF_STACK_NAME=das-walkthrough
 
 - Copy the content from S3 bucket
@@ -164,6 +164,7 @@ aws glue get-crawler --name $CF_TEMPLATE_NAME-crawler | grep State
 3. Create the view
 
 Sets up the table name in an environment variable = DASBLOG_GLUE_TABLE 
+
 ./bin/setup-dasblog-athena-view.sh 
 
 aws athena get-query-execution \
@@ -258,3 +259,9 @@ https://stackoverflow.com/questions/55386143/aws-glue-tutorial-fails-when-trying
 aws glue start-crawler --name $CF_TEMPLATE_NAME-crawler
 aws glue get-crawler --name $CF_TEMPLATE_NAME-crawler | grep State
 
+Athena Queries
+==============
+SELECT command, dbusername, databasename, remotehost, clientapplication
+FROM dasblog
+WHERE (command='CONNECT'
+        OR command='DISCONNECT')
