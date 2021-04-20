@@ -12,47 +12,17 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: Aurora/PG Database Activity Streams Walkthrough
 
-## Parameters
+# Parameters
 Parameters:
-#   EnvType:
-#     Type: String
-#     Default: dev
-#     AllowedValues:
-#       - prod
-#       - dev
-#     Description: Please leave default value, reserved for internal use.
-#   CreateInstance:
-#     Type: String
-#     Default: "true"
-#     AllowedValues:
-#       - "true"
-#       - "false"
-#     Description: Determines if the database instance needs to be created.
   TemplateName:
     Type: String
     Default: dasblog-walkthrough
     Description: Name used for different elements created.
   TemplateURLBase:
     Type: String
+    Default: https://dasblog-templates2.s3.amazonaws.com
     Description: Bucket holding the cloudformation template
-#   isSecondary:
-#     Default: "No"
-#     Type: String
-#     AllowedValues:
-#       - "Yes"
-#       - "No"
-#     Description: Please leave default value, reserved for internal use.
-
-## Conditions
-# Conditions:
-#   isInEE:
-#     !Equals [ !Ref EnvType, "prod" ]
-#   isNotInEE:
-#     !Equals [ !Ref EnvType, "dev" ]
-#   WithInstance: !Equals [!Ref CreateInstance, "true"]
-#   condIsSecondary: !Equals [ !Ref isSecondary, "Yes" ]
-
-
+    
 ## Resources
 Resources:
 
