@@ -114,3 +114,6 @@ Outputs:
   AthenaResultQueryBucket:
     Description: Bucket for managing Athena queries
     Value: !Ref 'DASAthenaResultsQueryBucket'
+  DasblogCrawlerRoleArn:
+    Description: Role for the web crawler
+    Value: !GetAtt dasblogCrawlerRole.Arn
