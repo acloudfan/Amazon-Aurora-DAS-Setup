@@ -1,4 +1,6 @@
 #!/bin/bash
+CALLER_IDENTITY=$(aws sts get-caller-identity | jq -r .Arn)
+echo "CALLER_IDENTITY=$CALLER_IDENTITY"
 
 # Adding Lakeformation permissions
 echo "Setting Lake Formation permissions for Webcrawler role"
@@ -10,6 +12,5 @@ aws lakeformation grant-permissions --principal DataLakePrincipalIdentifier=$CAL
 
 # Grant select
 echo "Granting select permission to current role/IAM user"
-CALLER_IDENTITY=$(aws sts get-caller-identity | jq -r .Arn)
-echo $CALLER_IDENTITY
+
 aws lakeformation grant-permissions --principal DataLakePrincipalIdentifier=$DAS_WEBCRAWLER_ROLE --permissions "CREATE_DATABASE" --resource '{ "Catalog": {}}' 
