@@ -155,6 +155,10 @@ INSERT INTO test_table(id, name) values(1, 'test');
 SELECT * FROM test_table;
 
 ### Step-7
+* May require Lakeformation permissions for the IAM User
+https://docs.aws.amazon.com/lake-formation/latest/dg/lf-permissions-reference.html
+
+
 Query the data with Athena to generate the reports.
 
 1. Create the resources for querying the data

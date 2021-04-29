@@ -9,8 +9,10 @@ export DAS_WEBCRAWLER_ROLE=`aws cloudformation --region us-east-1 describe-stack
 echo $DAS_WEBCRAWLER_ROLE
 
 aws lakeformation grant-permissions --principal DataLakePrincipalIdentifier=$CALLER_IDENTITY --permissions "SELECT" --permissions-with-grant-option "SELECT" --resource '{ "Table": { "DatabaseName": "dasblog-walkthrough-db", "TableWildcard": {} } }'
+aws lakeformation grant-permissions --principal DataLakePrincipalIdentifier=$CALLER_IDENTITY  --permissions "ALL" --permissions-with-grant-option "ALL" --resource '{ "Database": { "Name": "dasblog-walkthrough-db"}}'
 
 # Grant select
 echo "Granting select permission to current role/IAM user"
 
 aws lakeformation grant-permissions --principal DataLakePrincipalIdentifier=$DAS_WEBCRAWLER_ROLE --permissions "CREATE_DATABASE" --resource '{ "Catalog": {}}' 
+aws lakeformation grant-permissions --principal DataLakePrincipalIdentifier=$DAS_WEBCRAWLER_ROLE  --permissions "ALL" --permissions-with-grant-option "ALL" --resource '{ "Database": { "Name": "dasblog-walkthrough-db"}}'
