@@ -1,12 +1,18 @@
 #!/bin/bash
+#This scripts updates the bashrc file with environment variables
+#used in the utility scripts
 
 # install psql
+echo "Installing psql ..."
 sudo yum install -y postgresql96-contrib 
 
 # install jq
+echo "Installing jq ..."
 sudo yum install -y jq
 
 echo "Setting up environment variables ... please wait"
+
+# These 4 variables MUST be setup before executing the rest of the script
 
 echo "export S3BUCKET_TEMPLATE_URL=\"$S3BUCKET_TEMPLATE_URL\"" >> /home/ec2-user/.bashrc
 echo "export CF_TEMPLATE_NAME=\"$CF_TEMPLATE_NAME\"" >> /home/ec2-user/.bashrc
@@ -39,9 +45,6 @@ echo "export DAS_S3_BUCKET=\"$DAS_S3_BUCKET\"" >> /home/ec2-user/.bashrc
 export DAS_S3_BUCKET_ARN=`aws cloudformation --region us-east-1 describe-stacks --stack-name $DAS_WALKTHROUGH_CF_STACK_NAME  \
                     --query "Stacks[0].Outputs[?OutputKey=='DASS3BucketArn'].OutputValue" --output text`
 echo "export DAS_S3_BUCKET_ARN=\"$DAS_S3_BUCKET_ARN\"" >> /home/ec2-user/.bashrc
-
-# export DAS_FIREHOSE_ROLE_ARN=`aws cloudformation --region us-east-1 describe-stacks --stack-name $DAS_WALKTHROUGH_CF_STACK_NAME  \
-#                     --query "Stacks[0].Outputs[?OutputKey=='DASFirehoseS3RoleArn'].OutputValue" --output text`
 
 export DB_SECURITY_GROUP=`aws cloudformation --region us-east-1 describe-stacks --stack-name $DAS_WALKTHROUGH_CF_STACK_NAME  \
                     --query "Stacks[0].Outputs[?OutputKey=='DBSecGroup'].OutputValue" --output text`

@@ -1,6 +1,20 @@
 #!/bin/bash
+
+# Check if Lakeformation/Fine grained persmissions are enabled
+LF_DETAILS=$(aws lakeformation get-data-lake-settings)
+LF_DETAILS_DB=$(echo $LF_DETAILS | jq -r .DataLakeSettings.CreateDatabaseDefaultPermissions[0].Principal.DataLakePrincipalIdentifier)
+LF_DETAILS_TABLE=$(echo $LF_DETAILS | jq -r .DataLakeSettings.CreateTableDefaultPermissions[0].Principal.DataLakePrincipalIdentifier)
+
 CALLER_IDENTITY=$(aws sts get-caller-identity | jq -r .Arn)
-echo "CALLER_IDENTITY=$CALLER_IDENTITY"
+
+if [[ "$LF_DETAILS_DB" = "IAM_ALLOWED_PRINCIPALS"  &&  "$LF_DETAILS_TABLE" = "IAM_ALLOWED_PRINCIPALS" ]]; then
+  echo "Lakeformation : Finegrained persmissions not enabled"
+  echo "No action taken !!!"
+  exit 0
+else 
+  echo "IAM User ($CALLER_IDENTITY) Must have persmissions for Lakeformation"
+fi
+
 
 # Adding Lakeformation permissions
 echo "Setting Lake Formation permissions for Webcrawler role"
