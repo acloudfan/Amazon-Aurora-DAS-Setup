@@ -13,23 +13,10 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: Amazon RDS PostgreSQL Database Activity Streams Lab
 ## Parameters
 Parameters:
-#   EnvType:
-#     Type: String
-#     Default: dev
-#     AllowedValues:
-#       - prod
-#       - dev
-#     Description: Determines if we are in EE or not
+
   TemplateName:
     Type: String
     Description: Name used for different elements created.
-#   CreateInstance:
-#     Type: String
-#     Default: "false"
-#     AllowedValues:
-#       - "true"
-#       - "false"
-#     Description: Determines if the database instance needs to be created.
   DBInstanceClass:
     Description: 'The instance type of database server.'
     Type: String
@@ -43,13 +30,7 @@ Parameters:
   PrivateSubnets:
     Type: String
     Description: IDs of a Private subnets for RDS PG.
-#   isSecondary:
-#     Default: "No"
-#     Type: String
-#     AllowedValues:
-#       - "Yes"
-#       - "No"
-#     Description: Please leave default value, reserved for internal use.
+
   DBMasterUsername:
     Description: 'The master user name for the DB instance (ignored when DBSnapshotIdentifier is set, value used from snapshot).'
     Type: String
@@ -62,15 +43,7 @@ Parameters:
       - 11.6
       - 11.7
       - 11.8
-## Conditions
-# Conditions:
-#   isInEE:
-#     !Equals [ !Ref EnvType, "prod" ]
-#   isNotInEE:
-#     !Equals [ isInEE, false ]
-#   WithInstance: !Equals [!Ref CreateInstance, "true"]
-  # the bug fix for secondary region KMS is only deployed if parameter is yes
-#   condIsSecondary: !Equals [ !Ref isSecondary, "Yes" ]
+
 
 Mappings:
   ClusterSettings:

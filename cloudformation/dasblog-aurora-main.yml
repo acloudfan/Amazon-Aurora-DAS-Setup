@@ -1,6 +1,6 @@
 ---
 ## Amazon Aurora PostgreSQL Database Activity Walktrough
-## Creates Aurora PostgreSQL Cluster
+## Creates Aurora PostgreSQL Cluster, Cloud9 IDE instance
 ##
 ## Changelog:
 ##
@@ -39,13 +39,11 @@ Resources:
   dasblogwalkthroughRDSStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      # TemplateURL: https://dasblog-template.s3.amazonaws.com/dasblog-aurora-cluster.yml
+
       TemplateURL: !Sub ${TemplateURLBase}/cloudformation/dasblog-aurora-cluster.yml
       Parameters:
           PubSubnetCidr: !GetAtt 'dasblogwalkthroughVPCStack.Outputs.PublicSubnetACidr'
           TemplateName: !Ref TemplateName
-        #   CreateInstance: !Ref CreateInstance
-        #   isSecondary: !Ref isSecondary
           MainVPC: !GetAtt dasblogwalkthroughVPCStack.Outputs.MainVPC
           PrivateSubnets: !GetAtt 'dasblogwalkthroughVPCStack.Outputs.PrivateSubnets'
 
@@ -53,7 +51,6 @@ Resources:
   dasblogwalkthroughC9Stack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      # TemplateURL: https://dasblog-template.s3.amazonaws.com/dasblog-aurora-cloud9.yml
       TemplateURL: !Sub ${TemplateURLBase}/cloudformation/dasblog-aurora-cloud9.yml
       Parameters:
           PubSubnetId: !GetAtt 'dasblogwalkthroughVPCStack.Outputs.PublicSubnetA'
@@ -64,7 +61,6 @@ Resources:
   dasblogwalkthroughCMK:
     Type: AWS::CloudFormation::Stack
     Properties:
-      # TemplateURL: https://dasblog-template.s3.amazonaws.com/dasblog-aurora-cmk-role.yml
       TemplateURL: !Sub ${TemplateURLBase}/cloudformation/dasblog-aurora-cmk-role.yml
       Parameters:
         TemplateName: !Ref TemplateName
@@ -114,9 +110,7 @@ Outputs:
   DASS3BucketArn:
     Description: "This is the bucket for writing out the DAS files" 
     Value: !GetAtt DASDataBucket.Arn
-  # DASFirehoseS3RoleArn:
-  #   Description: 'Firehose Role Used for Delivery to S3' 
-  #   Value: !GetAtt roleFirehoseS3Delivery.Arn
+
   DASCMKKeyID:
     Description: "This is the KMS Key ID" 
     Value: !GetAtt dasblogwalkthroughCMK.Outputs.CMKKeyID
@@ -128,5 +122,4 @@ Outputs:
     Value: !GetAtt dasblogwalkthroughCMK.Outputs.LambdaRoleArn
   DBClusterId:
     Description: Cluster resource ARN
-    # Value: !If [WithInstance, !GetAtt dasblogwalkthroughRDSStack.Outputs.DBClusterId, '']
     Value: !GetAtt dasblogwalkthroughRDSStack.Outputs.DBClusterId

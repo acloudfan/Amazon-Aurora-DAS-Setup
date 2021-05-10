@@ -1,6 +1,6 @@
 ---
 ## Amazon Aurora PostgreSQL Database Activity Walktrough
-## Creates the resources for reporting
+## Creates the Glue Database, Crawler & a bucket for Athena results
 ##
 ## Changelog:
 ##

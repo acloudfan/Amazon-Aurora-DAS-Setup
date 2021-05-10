@@ -1,10 +1,14 @@
-# Setup Database Activity Streams on RDS Aurora
+# Walkthrough
+The steps here demonstrates the use of Aurora Database Activity streams. 
 
+# Setup Database Activity Streams on RDS Aurora
 1. Create an S3 bucket in the region you will carry out the steps
 2. Copy the content of this repository to the S3 bucket
 3. In Step-1 change the name of the bucket to your bucket
    export S3BUCKET_TEMPLATE=<<YOUR BUCKET>
 4. Follow the instructions in the rest of the steps to see the DAS in action
+
+PS: All commands are to be executed in the Cloud9 terminal.
 
 ### Step-1
 Create the CloudFormation Stack 

@@ -14,13 +14,7 @@ Description: Aurora/PG Database Activity Streams Walkthrough
 
 ## Parameters
 Parameters:
-  # EnvType:
-  #   Type: String
-  #   Default: dev
-  #   AllowedValues:
-  #     - prod
-  #     - dev
-  #   Description: Determines if we are in EE or not
+
   C9EC2InstanceType:
     Description: EC2 instance type on which IDE runs
     Type: String
@@ -50,12 +44,6 @@ Parameters:
     Type: AWS::EC2::Subnet::Id
     Description: ID of a Public Subnet for Cloud9.
 
-## Conditions
-# Conditions:
-#   isInEE:
-#     !Equals [ !Ref EnvType, "prod" ]
-#   isNotInEE:
-#     !Equals [ !Ref EnvType, "dev" ]
 
 Resources:
   Cloud9Instance:
@@ -67,9 +55,6 @@ Resources:
       SubnetId: !Ref PubSubnetId
       InstanceType: !Ref C9EC2InstanceType
       OwnerArn:
-        # !If [isInEE, !Sub 'arn:aws:sts::${AWS::AccountId}:assumed-role/TeamRole/MasterKey', !Ref "AWS::NoValue"]
-        # !Sub 'arn:aws:sts::${AWS::AccountId}:assumed-role/TeamRole/MasterKey'
-        # Creator owns the Cloud9 env
         !Ref "AWS::NoValue"
 
 ## Outputs

@@ -1,6 +1,6 @@
 ---
 ## Amazon Aurora PostgreSQL Database Activity Walktrough
-## Creates Aurora PostgreSQL Cluster
+## Creates CMK used for events data encryption/decryption
 ##
 ## Changelog:
 ##

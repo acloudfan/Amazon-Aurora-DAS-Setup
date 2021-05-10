@@ -1,6 +1,6 @@
 ---
 ## Amazon Aurora PostgreSQL Database Activity Walktrough
-## Creates Aurora PostgreSQL Cluster
+## Creates the VPC for DB Cluster
 ##
 ## Changelog:
 ##
