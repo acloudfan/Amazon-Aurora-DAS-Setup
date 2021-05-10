@@ -1,7 +1,8 @@
 #!/bin/bash
-# Deletes the objects from the buckets
+# Deletes the objects from the buckets created by the CloudFormation
+# Used in the cleanup step
 
-ATHENA_RESULT_BUCKET=`aws cloudformation --region us-east-1 describe-stacks --stack-name $DAS_WALKTHROUGH_CF_STACK_NAME-aurora-glue  \
+ATHENA_RESULT_BUCKET=`aws cloudformation --region $AWSREGION describe-stacks --stack-name $DAS_WALKTHROUGH_CF_STACK_NAME-aurora-glue  \
                     --query "Stacks[0].Outputs[?OutputKey=='AthenaResultQueryBucket'].OutputValue" --output text`
 
             

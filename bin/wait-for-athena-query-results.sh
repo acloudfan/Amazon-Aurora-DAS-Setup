@@ -1,4 +1,5 @@
 #!/bin/bash
+#Utility that waits for the Athena query to complete.
 
 QUERY_ID=$1
 

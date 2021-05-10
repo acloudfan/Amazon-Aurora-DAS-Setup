@@ -1,22 +1,23 @@
 import json
 import base64
 
+# Class for processing the Database Activity events of type=record
 class SQLEventRecords():
     records = []
     # Initialize
     def __init__(self):
         print('SQLEventRecords')
         
+    # Add the db activity record to the local array
     def add(self,recordId, record, approximateArrivalTimestamp):
         self.records.append((recordId, record, approximateArrivalTimestamp))
     
-    # Returns an array of processed heartbeat records
+    # Process the DB activity event records
     def process(self):
         print('HB processing count = %'.format(len(self.records)))
         output_records = []
         
-        
-        
+        # Loop through the records received in the stream
         for record in self.records:
             # convert JSON to string
             record_send = json.dumps(record[1])

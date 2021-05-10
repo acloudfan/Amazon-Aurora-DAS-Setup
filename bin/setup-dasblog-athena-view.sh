@@ -1,6 +1,8 @@
 #!/bin/bash
+# This is a utility script that creates an Athena view
+# Queries may be be executed against the original table as well
 
-
+# Get the name of the Glue table
 DASBLOG_GLUE_TABLE=$(aws athena list-table-metadata \
     --catalog-name AwsDataCatalog \
     --database-name $DASBLOG_GLUE_DATABASE \
@@ -8,7 +10,8 @@ DASBLOG_GLUE_TABLE=$(aws athena list-table-metadata \
     | jq .TableMetadataList[0].Name)
     
 echo "Glue TableName = $DASBLOG_GLUE_TABLE"
-    
+
+# Query for creating the Athena view    
 ATHENA_VIEW_QUERY="
 CREATE
         OR REPLACE VIEW $DASBLOG_ATHENA_VIEW_NAME AS 
@@ -46,7 +49,7 @@ SELECT partition_0 AS year,
          databaseactivityeventlist[1] AS raw 
 FROM $DASBLOG_GLUE_TABLE ; "
 
-
+# Execute the view creation query
 QUERY_ID=$(aws athena start-query-execution  \
   --work-group $DASBLOG_ATHENA_WORKGROUP \
   --query-execution-context "Database=$DASBLOG_GLUE_DATABASE" \

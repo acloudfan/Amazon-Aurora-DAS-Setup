@@ -1,4 +1,5 @@
 #!/bin/bash
+# Sample query that may be executed against the events data
 
 QUERY="SELECT command, dbusername, databasename, remotehost, clientapplication
 FROM $DASBLOG_ATHENA_VIEW_NAME

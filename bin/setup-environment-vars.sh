@@ -1,6 +1,9 @@
 #!/bin/bash
-#This scripts updates the bashrc file with environment variables
-#used in the utility scripts
+#This script does 3 things:
+# 1. Installs the psql used for testing
+# 2. Installs jq for parsing of JSON on command line
+# 3. Updates the bashrc file with environment variables that are used in scripts and commands
+# This script needs to be executed only once
 
 # install psql
 echo "Installing psql ..."

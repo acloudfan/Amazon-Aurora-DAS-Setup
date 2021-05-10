@@ -13,6 +13,7 @@ if [ -z "$1" ];
         fi
 fi
 
+# Inform the user if Lambda transformation is enabled or not
 echo "Setting up Firehose Transformation = $DO_STREAM_TRANSFORM"
 
 
@@ -38,24 +39,4 @@ aws cloudformation create-stack \
                  ParameterKey=LambdaFunctionName,ParameterValue=$LAMBDA_FUNCTION_NAME  \
                  ParameterKey=doStreamTransform,ParameterValue=$DO_STREAM_TRANSFORM \
     --capabilities "CAPABILITY_NAMED_IAM"
-
-
-# # 3. Create the stream
-#  aws firehose create-delivery-stream \
-#      --delivery-stream-name dasblog-walkthrough-firehose  \
-#      --delivery-stream-type KinesisStreamAsSource \
-#      --kinesis-stream-source-configuration "KinesisStreamARN=$STREAM_ARN,RoleARN=$DAS_FIREHOSE_ROLE_ARN" \
-#      --extended-s3-destination-configuration "BucketARN=$DAS_S3_BUCKET_ARN,RoleARN=$DAS_FIREHOSE_ROLE_ARN,Prefix=success,ErrorOutputPrefix=failed,CloudWatchLoggingOptions={Enabled=true,LogGroupName=dasblog-walkthrough-firehose,LogStreamName=dasblog-walkthrough-logstream}"   
-#     #  --delivery-stream-encryption-configuration-input  KeyARN=$DAS_CMK_KEY_ARN,KeyType=CUSTOMER_MANAGED_CMK   
-
-
-# echo $DAS_STREAM_ARN
-# aws cloudformation update-stack \
-#     --stack-name dasblog-firehose-stream \
-#     --template-body file://dasblog-aurora-firehose.yml \
-#     --parameters ParameterKey=DASS3BucketARN,ParameterValue=$DAS_S3_BUCKET_ARN \
-#                  ParameterKey=DASStreamARN,ParameterValue=$DAS_STREAM_ARN  \
-#                  ParameterKey=ClusterResourceID,ParameterValue=$CLUSTER_RESOURCE_ID  \
-#                  ParameterKey=LambdaRoleArn,ParameterValue=$DAS_LAMBDA_ROLE_ARN \
-#     --capabilities "CAPABILITY_NAMED_IAM"
 

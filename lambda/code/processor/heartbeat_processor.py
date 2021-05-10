@@ -1,6 +1,7 @@
 import json
 import base64
 
+# Class for processing the Heartbeat events
 class HeartBeatEventRecords():
     records = []
     
@@ -26,14 +27,11 @@ class HeartBeatEventRecords():
             print('HeartBeat Records Processed ....count={}'.format(len(self.records)))
             result = 'Ok'
         
-        
+        # Loop through the event records and write out to the stream
         for record in self.records:
             # convert JSON to string
             (record[1])['approximateArrivalTimestamp']=record[2]
             record_send = json.dumps(record[1])
-            # record_send= record_send + '\n'
-            
-
             
             # No change to the record
             output_record = {
@@ -42,16 +40,10 @@ class HeartBeatEventRecords():
                 'data': base64.b64encode(record_send.encode()).decode("ascii")
             }
             output_records.append(output_record)
-            
-            # print(output_record)
-            
-        # print('HB Successfully processed {} records.'.format(len(output_records)))
         
         return output_records
 
-            
-        # print('HB Successfully ignore {} records.'.format(len(output_records)))
         
-        
+    # Gets called from the main handler for processing the heartbet events
     def process(self,flag):
-        return self.process_no_change_or_ignore(flag);
+        return self.process_no_change_or_ignore(flag)

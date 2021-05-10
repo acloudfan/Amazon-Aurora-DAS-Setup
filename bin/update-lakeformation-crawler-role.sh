@@ -1,4 +1,6 @@
 #!/bin/bash
+# This script sets up the appropriate permissions for the role/user to be able to
+# execute the Athena queries.
 
 # Check if Lakeformation/Fine grained persmissions are enabled
 LF_DETAILS=$(aws lakeformation get-data-lake-settings)
